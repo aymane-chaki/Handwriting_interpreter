@@ -1,1 +1,2 @@
-"# Handwriting_interpreter" 
+# Handwriting Interpreter
+Handwritten numbers recognition with Python.
