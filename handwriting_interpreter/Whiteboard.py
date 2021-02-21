@@ -5,7 +5,7 @@ from functools import partial
 canvas_width = 600
 canvas_height = 450
 color = 'black'
-diameter = 20
+diameter = 10
 
 def eraser (event):
     global color
@@ -38,8 +38,8 @@ pen_button.bind('<Button-1>',func=pen)
 c = Canvas(master, width=canvas_width, height=canvas_height, bg='white')
 c.pack(expand=YES, fill=BOTH)
 c.bind('<B1-Motion>', func=paint)
-message = Label(master,text='Draw to your heart\'s content!')
-message.pack(side=BOTTOM)
+#message = Label(master,text='Draw to your heart\'s content!')
+#message.pack(side=BOTTOM)
 eraser_button.pack()
 pen_button.pack()
 print(color)
