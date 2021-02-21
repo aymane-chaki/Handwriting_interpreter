@@ -28,10 +28,14 @@ def move(move_event):
 def delete_all():
     myCanvas.delete('all')
 
-# resultClick is a function that takes an entry and print it in a label widget
-def resultClick():
-    result_label = Label(rightCanvas,text="Your input is "+e.get())
-    result_label.config(font=("Calibri",12),bg="white")
+#def testResult():
+    #number= input("Entrer un nomber")
+    #return number
+
+# display_result is a function that takes an entry and print it in a label widget
+def display_result():
+    result_label = Label(rightCanvas,text="Vous avez écrit le chiffre : \n "+ str(int(input("Enter a number :"))))
+    result_label.config(font=("Calibri",10),bg="white")
     result_label.place(relx=0.5,rely=0.95, anchor='center')
     #print(e.get())
 
@@ -73,10 +77,10 @@ erase_all.place(relx=0.5,rely=0.55, anchor='center')
 
 #####################      Creating the i/o field      #####################
 # creating input field
-e=Entry(rightCanvas)
-e.place(relx=0.5,rely=0.85, anchor='center')
+#e=Entry(rightCanvas)
+#e.place(relx=0.5,rely=0.85, anchor='center')
 # show result button
-result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=resultClick)
+result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=display_result)
 result_button.place(relx=0.5,rely=0.65, anchor='center')
 
 
