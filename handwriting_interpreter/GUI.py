@@ -1,16 +1,17 @@
 from tkinter import *
+from PIL import Image
+import io
 
 #####################      Define Functions      #####################
-
 def eraser (event):
     global color
     color = 'white'
-    print(color)
+    #print(color) # test purpose
 
 def pen (event):
     global color
     color = 'black'
-    print(color)
+    #print(color) # test purpose
 
 # penClick is a function that memorize the position of the last click
 def penClick(click_event):
@@ -22,32 +23,52 @@ def penClick(click_event):
 def move(move_event):
     global prev
     global color
-    myCanvas.create_oval(prev.x,prev.y,move_event.x,move_event.y,width=10,fill="white")
+    myCanvas.create_oval(prev.x,prev.y,move_event.x,move_event.y,width=10,fill=color,outline=color)
     prev=move_event
+
+# delete_all is a function that deletes everything from the canvas
+def delete_all():
+    myCanvas.delete('all')
+
+# display_result is a function that takes an input and print it in a label widget
+def display_result():
+    result_label = Label(rightCanvas,text="Vous avez écrit le chiffre : \n "+ str(int(input("Enter a number :"))))
+    result_label.config(font=("Calibri",10),bg="white")
+    result_label.place(relx=0.5,rely=0.95, anchor='center')
+
+# display_image takes a snapshot of the canvas
+def display_image():
+    myCanvas.update()
+    ps = myCanvas.postscript(colormode='mono')
+    img = Image.open(io.BytesIO(ps.encode('utf-8')))
+    img.show()
+    #img.save('result.png')
+''' If ever you get this error : OSError: Unable to locate Ghostscript on paths
+    just paste this on your cmd : conda install -c conda-forge ghostscript'''
+
 
 #####################      Prepare the environment      #####################
 root= Tk(className=' Handwritten Digits Interpreter GUI')
 root.resizable(False,False)
-root.geometry("700x500")
+root.geometry("700x500") # width x height x positionX x positionY
 
 #####################      Make the Layout      #####################
 # myCanvas is the main canvas where the user can draw
 myCanvas=Canvas(root,width=540,height=500,background='white') #myCanvas.pack(expand=YES,fill=BOTH)
 myCanvas.grid(row=0,column=0)
 #Let's make some borders :)
-myCanvas.create_line(540,0,540,500,fill='cadet blue') #right border
 myCanvas.create_line(1.5,0,1.5,500,fill='cadet blue') #left border
 
 # rightCanvas is the canvas where we will put the buttons, the text label, ... (user cannot draw on)
-rightCanvas=Canvas(root,width=155,height=500,background='white')
+rightCanvas=Canvas(root,width=155,height=500,background='white', highlightthickness=0)
 rightCanvas.place(relx =1.0, rely=0.0, anchor='ne')
-
+#Let's make some borders :)
+rightCanvas.create_line(0,0,0,500,fill='cadet blue') #right border
 
 #####################      Creating a label widget      #####################
 myLabel= Label(rightCanvas,text="\n Handwritten \n Digits \n Interpreter",bg="white")
-myLabel.config(font=("Calibri",20))
-myLabel.place(relx =0.99, rely=0.0, anchor='ne')
-
+myLabel.config(font=("Calibri",18))
+myLabel.place(relx =0.95, rely=0.01, anchor='ne')
 
 #####################      Creating the buttons      #####################
 # pen button
@@ -58,11 +79,24 @@ penButton.bind('<Button-1>',func=pen)
 eraserButton = Button(rightCanvas,text="Eraser",padx=15,pady=5) #state=DISABLED to disable the button
 eraserButton.place(relx =0.75, rely=0.35, anchor='center')
 eraserButton.bind('<Button-1>',func=eraser)
+# erase all button
+erase_all=Button(rightCanvas,text="Erase all",padx=30,pady=5,command=delete_all)
+erase_all.place(relx=0.5,rely=0.55, anchor='center')
+
+#####################      Creating the i/o field      #####################
+# creating input field
+#e=Entry(rightCanvas)
+#e.place(relx=0.5,rely=0.85, anchor='center')
+# show result button
+result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=display_result)
+result_button.place(relx=0.5,rely=0.65, anchor='center')
+# display image button
+result_button=Button(rightCanvas,text="Display Image",padx=20,pady=5,command=display_image)
+result_button.place(relx=0.5,rely=0.85, anchor='center')
 
 
-
-#####################      Main      #####################
-myCanvas.bind('<Button-1>',penClick) #Sorry, I still don't know how it works :/
-myCanvas.bind('<B1-Motion>',move) #Sorry, I still don't know how it works :/
+#####################      Drawing      #####################
+myCanvas.bind('<Button-1>',penClick) #Sorry, I still don't know how bind() works :/
+myCanvas.bind('<B1-Motion>',move) #Sorry, I still don't know how bind() works :/
 
 root.mainloop()
