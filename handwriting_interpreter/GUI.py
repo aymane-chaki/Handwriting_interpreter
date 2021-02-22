@@ -1,6 +1,10 @@
 from tkinter import *
 from PIL import Image
 import io
+from cv2 import cv2
+from torchvision.transforms import ToTensor
+import torchvision
+import numpy as np
 
 #####################      Define Functions      #####################
 # eraser is a function that changes the value of the global variable color into "white"
@@ -41,8 +45,50 @@ def display_image():
     myCanvas.update()
     ps = myCanvas.postscript(colormode='mono')
     img = Image.open(io.BytesIO(ps.encode('utf-8')))
-    img.show()
-    #img.save('result.png')
+    #img.show()
+    img.save('snapshotCanva.png') # takes a snapshot of the whole canva
+    contouring_image('snapshotCanva.png') # crop this snapshot on the digit's edges
+    resizing_image('croppedImage1.png') # resize the cropped image to 28x28
+    img_to_Tensor('resized_image.png') # transform the resized and cropped image to tensor
+
+# contouring_image is a function that takes as an argument an image path and cropped the image on the edges using openCV
+def contouring_image(path):
+    image= cv2.imread(path)
+    original_image= image
+    gray= cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    edges= cv2.Canny(gray, 50,200)
+    contours, hierarchy= cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    sorted_contours= sorted(contours, key=cv2.contourArea, reverse= True)
+
+    for (i,c) in enumerate(sorted_contours):
+        x,y,w,h= cv2.boundingRect(c)
+        cropped_contour= original_image[y:y+h, x:x+w]
+        image_name= "croppedImage" + str(i+1) + ".png"
+        cv2.imwrite(image_name, cropped_contour)
+        #readimage= cv2.imread(image_name)
+        #cv2.imshow('Image', readimage)
+        cv2.waitKey(0)
+
+def resizing_image(path):
+    img = Image.open(path)
+    resized_img = img.resize((28, 28))
+    resized_img.save("resized_image.png")
+    resized_img.show()
+
+def img_to_Tensor(path):
+    image = Image.open(path)
+    # transform Image into the numpy array
+    image_2_npArray = np.asarray(image)
+    print(np.shape(image_2_npArray))
+    print('the shape of loaded image transformed into numpy array: {}'.format(np.shape(image_2_npArray)))
+    print('transformed image: {}'.format(image_2_npArray))
+
+    # transform the numpy array into the tensor
+    image_2_npArray_2_tensor = torchvision.transforms.ToTensor()(image_2_npArray)
+    print('the shape of numpy array transformed into tensor: {}'.format(np.shape(image_2_npArray_2_tensor)))
+    print('transformed numpy array: {}'.format(image_2_npArray_2_tensor))
+
+
 ''' If ever you get this error : OSError: Unable to locate Ghostscript on paths
     just paste this on your cmd : conda install -c conda-forge ghostscript'''
 
