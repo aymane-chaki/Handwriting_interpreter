@@ -3,23 +3,23 @@ from PIL import Image
 import io
 
 #####################      Define Functions      #####################
+# eraser is a function that changes the value of the global variable color into "white"
 def eraser (event):
     global color
     color = 'white'
-    #print(color) # test purpose
 
+# pen is a function that changes the value of the global variable color into "black"
 def pen (event):
     global color
     color = 'black'
-    #print(color) # test purpose
 
 # penClick is a function that memorize the position of the last click
 def penClick(click_event):
     global prev
     prev=click_event
 
-# move is a function that create an oval on the position of the last click 
-# and move to another click which will be considered as the previous click
+# move is a function that creates an oval on the position of the last click 
+#   and move to another click which will be considered as the previous click
 def move(move_event):
     global prev
     global color
@@ -50,19 +50,17 @@ def display_image():
 #####################      Prepare the environment      #####################
 root= Tk(className=' Handwritten Digits Interpreter GUI')
 root.resizable(False,False)
-root.geometry("700x500") # width x height x positionX x positionY
+root.geometry("700x500") 
 
 #####################      Make the Layout      #####################
 # myCanvas is the main canvas where the user can draw
-myCanvas=Canvas(root,width=540,height=500,background='white') #myCanvas.pack(expand=YES,fill=BOTH)
+myCanvas=Canvas(root,width=540,height=500,background='white') 
 myCanvas.grid(row=0,column=0)
-#Let's make some borders :)
 myCanvas.create_line(1.5,0,1.5,500,fill='cadet blue') #left border
 
-# rightCanvas is the canvas where we will put the buttons, the text label, ... (user cannot draw on)
+# rightCanvas is the canvas where we will put the buttons, the text label widgets, ... (user cannot draw on)
 rightCanvas=Canvas(root,width=155,height=500,background='white', highlightthickness=0)
 rightCanvas.place(relx =1.0, rely=0.0, anchor='ne')
-#Let's make some borders :)
 rightCanvas.create_line(0,0,0,500,fill='cadet blue') #right border
 
 #####################      Creating a label widget      #####################
@@ -82,11 +80,6 @@ eraserButton.bind('<Button-1>',func=eraser)
 # erase all button
 erase_all=Button(rightCanvas,text="Erase all",padx=30,pady=5,command=delete_all)
 erase_all.place(relx=0.5,rely=0.55, anchor='center')
-
-#####################      Creating the i/o field      #####################
-# creating input field
-#e=Entry(rightCanvas)
-#e.place(relx=0.5,rely=0.85, anchor='center')
 # show result button
 result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=display_result)
 result_button.place(relx=0.5,rely=0.65, anchor='center')
@@ -94,9 +87,8 @@ result_button.place(relx=0.5,rely=0.65, anchor='center')
 result_button=Button(rightCanvas,text="Display Image",padx=20,pady=5,command=display_image)
 result_button.place(relx=0.5,rely=0.85, anchor='center')
 
-
-#####################      Drawing      #####################
-myCanvas.bind('<Button-1>',penClick) #Sorry, I still don't know how bind() works :/
-myCanvas.bind('<B1-Motion>',move) #Sorry, I still don't know how bind() works :/
+#####################      Main      #####################
+myCanvas.bind('<Button-1>',penClick)
+myCanvas.bind('<B1-Motion>',move) 
 
 root.mainloop()
