@@ -7,15 +7,15 @@ from torch.utils.data import DataLoader
 from torch import device, cuda
 import numpy as np
 
-#computing on the GPU for better performance
+########################################### computing on the GPU for better performance ##########################################
 gpu = device('cuda' if cuda.is_available() else 'cpu')
 
 
-#fetching dataset
+####################################################### fetching dataset   #######################################################
 mnist_train_downloaded = datasets.MNIST(root='.', train=True, download=True)
 mnist_test_downloaded = datasets.MNIST(root='.', train=False, download=True)
 
-#extracting features
+####################################################### extracting features ######################################################
 
 new_train_data = [] 
 i = 0 
@@ -34,17 +34,17 @@ for image_tensor in mnist_test_downloaded.data :
 
 """ new_test_dataset = MyDataset(new_test_data, mnist_train_downloaded.targets) """
 
-#splitting training dataset into training data, validation data, training labes and validation labels
+############## splitting training dataset into training data, validation data, training labes and validation labels ###############
 
 training_data, validation_data, training_targets, validation_targets = train_test_split(new_train_data,mnist_train_downloaded.targets, test_size=10000)
 
-#creating our 3 datasets (training, test, validation)
+####################################### creating our 3 datasets (training, test, validation) ######################################
 
 training_dataset = MyDataset(training_data, training_targets)
 test_dataset = MyDataset(mnist_test_downloaded.data, mnist_test_downloaded.targets)
 validation_dataset = MyDataset(validation_data, validation_targets)
 
-#creating our data loaders
+################################################### creating our data loaders #####################################################
 
 batch_size = 64     #64 is most used value in MNIST training, but we can change it to our preference since it's a hyperparameter
 training_DL = DataLoader(training_dataset,batch_size=batch_size)
@@ -53,10 +53,10 @@ validation_DL = DataLoader(validation_dataset,batch_size=batch_size)
 print(len(training_DL))
 
 
-#training
+############################################################# training ############################################################
 
 
-#testing
+############################################################# testing  ############################################################
 
 
-#saving model
+############################################################# saving model ########################################################
