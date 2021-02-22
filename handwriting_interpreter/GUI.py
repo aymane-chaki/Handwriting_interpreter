@@ -7,7 +7,6 @@ import torchvision
 import numpy as np
 import matplotlib.image as matimg
 
-
 color="black"
 #####################      Define Functions      #####################
 # eraser is a function that changes the value of the global variable color into "white"
@@ -39,7 +38,7 @@ def delete_all():
 
 # display_result is a function that takes an input and print it in a label widget
 def display_result():
-    result_label = Label(rightCanvas,text="Vous avez écrit le chiffre : \n "+ str(int(input("Enter a number :"))))
+    result_label = Label(rightCanvas,text="You have written the number : \n "+ str(int(input("Enter a number :"))))
     result_label.config(font=("Calibri",10),bg="white")
     result_label.place(relx=0.5,rely=0.95, anchor='center')
 
