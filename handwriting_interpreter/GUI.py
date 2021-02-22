@@ -1,4 +1,6 @@
 from tkinter import *
+from PIL import Image
+import io
 
 #####################      Define Functions      #####################
 def eraser (event):
@@ -28,21 +30,27 @@ def move(move_event):
 def delete_all():
     myCanvas.delete('all')
 
-#def testResult():
-    #number= input("Entrer un nomber")
-    #return number
-
-# display_result is a function that takes an entry and print it in a label widget
+# display_result is a function that takes an input and print it in a label widget
 def display_result():
     result_label = Label(rightCanvas,text="Vous avez écrit le chiffre : \n "+ str(int(input("Enter a number :"))))
     result_label.config(font=("Calibri",10),bg="white")
     result_label.place(relx=0.5,rely=0.95, anchor='center')
-    #print(e.get())
+
+# display_image takes a snapshot of the canvas
+def display_image():
+    myCanvas.update()
+    ps = myCanvas.postscript(colormode='mono')
+    img = Image.open(io.BytesIO(ps.encode('utf-8')))
+    img.show()
+    #img.save('result.png')
+''' If ever you get this error : OSError: Unable to locate Ghostscript on paths
+    just paste this on your cmd : conda install -c conda-forge ghostscript'''
+
 
 #####################      Prepare the environment      #####################
 root= Tk(className=' Handwritten Digits Interpreter GUI')
 root.resizable(False,False)
-root.geometry("700x500")
+root.geometry("700x500") # width x height x positionX x positionY
 
 #####################      Make the Layout      #####################
 # myCanvas is the main canvas where the user can draw
@@ -82,9 +90,12 @@ erase_all.place(relx=0.5,rely=0.55, anchor='center')
 # show result button
 result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=display_result)
 result_button.place(relx=0.5,rely=0.65, anchor='center')
+# display image button
+result_button=Button(rightCanvas,text="Display Image",padx=20,pady=5,command=display_image)
+result_button.place(relx=0.5,rely=0.85, anchor='center')
 
 
-#####################      Main      #####################
+#####################      Drawing      #####################
 myCanvas.bind('<Button-1>',penClick) #Sorry, I still don't know how bind() works :/
 myCanvas.bind('<B1-Motion>',move) #Sorry, I still don't know how bind() works :/
 
