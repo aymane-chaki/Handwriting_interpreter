@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import Image
 import io
 
+color="black"
 #####################      Define Functions      #####################
 # eraser is a function that changes the value of the global variable color into "white"
 def eraser (event):
