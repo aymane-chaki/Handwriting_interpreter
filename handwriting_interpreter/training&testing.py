@@ -12,9 +12,14 @@ import cv2
 gpu = device('cuda:0' if cuda.is_available() else 'cpu')
 
 ################################################ loading datasets from .pt files ##################################################
-training_dataset = load('datasets\\training.pt')
-test_dataset = load('datasets\\test.pt')
-validation_dataset = load('datasets\\validation.pt')
+ 
+#training_dataset = load('datasets\\training_4x4.pt')
+#test_dataset = load('datasets\\test_4x4.pt')
+#validation_dataset = load('datasets\\validation_4x4.pt')
+
+training_dataset = load('datasets\\training_7x7.pt')
+test_dataset = load('datasets\\test_7x7.pt')
+validation_dataset = load('datasets\\validation_7x7.pt')
 
 ################################################### creating our data loaders #####################################################
 
@@ -28,7 +33,8 @@ print(len(validation_DL))
 print(len(test_DL))
 
 ############################################### Instantiating our Nearal network ##################################################
-model = MyNetwork(n_features = 48, hid1=64, hid2=42, out=10)
+#model = MyNetwork(n_features = 48, hid1=64, hid2=42, out=10)   #n_features = 4*4*3, image is divided into 16 cells in the feature extraction process
+model = MyNetwork(n_features = 147, hid1=64, hid2=64, out=10)    #n_features = 7*7*3, image is divided into 49 cells in the feature extraction process
 #loss function
 loss_function = nn.CrossEntropyLoss()
 #cost optimization function
@@ -100,5 +106,7 @@ print("Test loss : {} \nTest precision : {}%\n".format(test_loss, correct*100))
 
 
 ############################################################# saving model ########################################################
-save(model,'models\\digit_model.pt')
+#save(model,'models\\digit_model_4x4.pt')
+save(model,'models\\digit_model_7x7.pt')
+#save(model,'models\\digit_model_test.pt')
 print("Module successfully saved.")

@@ -1,5 +1,5 @@
 from my_classes import MyDataset
-from my_functions import extract_features
+from my_functions import extract_features, cell_division
 from torchvision import datasets
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -66,6 +66,6 @@ test_dataset = MyDataset(new_test_data, mnist_test.targets)
 validation_dataset = MyDataset(validation_data, validation_targets)
 
 #### saving our datasets as .pt files
-save(training_dataset,'datasets\\training.pt')
-save(test_dataset,'datasets\\test.pt')
-save(validation_dataset,'datasets\\validation.pt')
+save(training_dataset,'datasets\\training_'+str(cell_division[0])+'x'+str(cell_division[1])+'.pt')
+save(test_dataset,'datasets\\test_'+str(cell_division[0])+'x'+str(cell_division[1])+'.pt')
+save(validation_dataset,'datasets\\validation_'+str(cell_division[0])+'x'+str(cell_division[1])+'.pt')
