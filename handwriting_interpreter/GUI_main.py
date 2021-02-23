@@ -5,7 +5,6 @@ from cv2 import cv2
 from torchvision.transforms import ToTensor
 import torchvision
 import numpy as np
-import matplotlib.image as matimg
 import matplotlib.pyplot as plt
 from torch import from_numpy, load, flatten, max
 from my_functions import extract_features
@@ -44,7 +43,7 @@ def display_result():
     result_label = Label(rightCanvas,text="The written number is : \n "+ str(predict()))
     result_label.config(font=("Calibri",10),bg="white")
     result_label.place(relx=0.5,rely=0.95, anchor='center')
-    resized_img = cv2.imread('resized_image.png')
+    resized_img = cv2.imread('processed_images\\resized_image.png')
     img_binary = cv2.threshold(resized_img, 0, 255, cv2.THRESH_BINARY_INV)[1]
     plt.imshow(img_binary, cmap='gray')
     plt.show()
@@ -55,16 +54,14 @@ def predict():
     ps = myCanvas.postscript(colormode='mono') # takes a snapshot of the whole canva
     img = Image.open(io.BytesIO(ps.encode('utf-8')))
     contouring_image(img) # crop this snapshot on the digit's edges
-    resizing_image('croppedImage.png') # resize the cropped image to 28x28
-    image_tensor = img_to_Tensor('resized_image.png') # transform the resized and cropped image to tensor
-    #resized_img = Image.open('resized_image.png')
+    resizing_image('processed_images\\croppedImage.png') # resize the cropped image to 28x28
+    image_tensor = img_to_Tensor('processed_images\\resized_image.png') # transform the resized and cropped image to tensor
     image_binary = cv2.threshold(image_tensor.numpy(), 0, 255, cv2.THRESH_BINARY_INV)[1]
     image_binary_tensor = from_numpy(image_binary)
     features = extract_features(image_binary_tensor)
     feature_list = []
     feature_list.append(features)
     data = from_numpy(np.array(feature_list))
-    #digit_recognition_model = load('models\\digit_model.pt')
     digit_recognition_model = load('models\\digit_model_7x7.pt')
     test_output = digit_recognition_model(flatten(data, start_dim=1).float())
     prediction = max(test_output, 1)[1].data.numpy().squeeze()
@@ -83,7 +80,7 @@ def contouring_image(pil_image):
     for (i,c) in enumerate(sorted_contours):
         x,y,w,h= cv2.boundingRect(c)
         cropped_contour= original_image[y-10:y+h+10, x-10:x+w+10]
-        image_name= "croppedImage.png"
+        image_name= "processed_images\\croppedImage.png"
         cv2.imwrite(image_name, cropped_contour)
         #readimage= cv2.imread(image_name)
         #cv2.imshow('Image', readimage)
@@ -94,14 +91,9 @@ def contouring_image(pil_image):
 def resizing_image(path):
     img = Image.open(path)
     resized_img = img.resize((28, 28))
-    resized_img.save("resized_image.png")
-    """ resized_img.show()
-    img_binary = cv2.threshold(np.array(resized_img), 0, 255, cv2.THRESH_BINARY_INV)[1]
-    plt.imshow(img_binary, cmap='gray')
-    plt.show() """
+    resized_img.save("processed_images\\resized_image.png")
 
 def img_to_Tensor(path):
-    #image = Image.open(path)
     image = cv2.imread(path,cv2.IMREAD_GRAYSCALE)
     # transform Image into the numpy array
     image_2_npArray = np.array(image)
@@ -151,10 +143,6 @@ erase_all.place(relx=0.5,rely=0.55, anchor='center')
 # show result button
 result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=display_result)
 result_button.place(relx=0.5,rely=0.65, anchor='center')
-""" # display image button
-result_button=Button(rightCanvas,text="Display Image",padx=20,pady=5,command=predict)
-result_button.place(relx=0.5,rely=0.85, anchor='center')
- """
 #####################      Main      #####################
 myCanvas.bind('<Button-1>',penClick)
 myCanvas.bind('<B1-Motion>',move) 
