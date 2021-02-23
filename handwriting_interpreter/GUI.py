@@ -6,6 +6,9 @@ from torchvision.transforms import ToTensor
 import torchvision
 import numpy as np
 import matplotlib.image as matimg
+import matplotlib.pyplot as plt
+from torch import from_numpy, load, flatten, max
+from my_functions import extract_features
 
 color="black"
 #####################      Define Functions      #####################
@@ -38,18 +41,29 @@ def delete_all():
 
 # display_result is a function that takes an input and print it in a label widget
 def display_result():
-    result_label = Label(rightCanvas,text="You have written the number : \n "+ str(int(input("Enter a number :"))))
+    result_label = Label(rightCanvas,text="The written number is : \n "+ str(predict()))
     result_label.config(font=("Calibri",10),bg="white")
     result_label.place(relx=0.5,rely=0.95, anchor='center')
 
-# display_image takes a snapshot of the canvas
-def display_image():
+# predict() takes a snapshot of the canvas, processes it and predicts which number is it
+def predict():
     myCanvas.update()
     ps = myCanvas.postscript(colormode='mono') # takes a snapshot of the whole canva
     img = Image.open(io.BytesIO(ps.encode('utf-8')))
     contouring_image(img) # crop this snapshot on the digit's edges
     resizing_image('croppedImage1.png') # resize the cropped image to 28x28
-    img_to_Tensor('resized_image.png') # transform the resized and cropped image to tensor
+    image_tensor = img_to_Tensor('resized_image.png') # transform the resized and cropped image to tensor
+    #resized_img = Image.open('resized_image.png')
+    image_binary = cv2.threshold(image_tensor.numpy(), 0, 255, cv2.THRESH_BINARY_INV)[1]
+    image_binary_tensor = from_numpy(image_binary)
+    features = extract_features(image_binary_tensor)
+    feature_list = []
+    feature_list.append(features)
+    data = from_numpy(np.array(feature_list))
+    digit_recognition_model = load('models\\digit_model.pt')
+    test_output = digit_recognition_model(flatten(data, start_dim=1).float())
+    prediction = max(test_output, 1)[1].data.numpy().squeeze()
+    return prediction 
 
 # contouring_image is a function that takes as an argument an image path and cropped the image on the edges using openCV
 def contouring_image(pil_image):
@@ -58,7 +72,7 @@ def contouring_image(pil_image):
     original_image= open_cv_image
     gray= cv2.cvtColor(open_cv_image,cv2.COLOR_BGR2GRAY)
     edges= cv2.Canny(gray, 50,200)
-    contours, hierarchy= cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    contours= cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[0]
     sorted_contours= sorted(contours, key=cv2.contourArea, reverse= True)
 
     for (i,c) in enumerate(sorted_contours):
@@ -75,20 +89,20 @@ def resizing_image(path):
     img = Image.open(path)
     resized_img = img.resize((28, 28))
     resized_img.save("resized_image.png")
-    resized_img.show()
+    """ resized_img.show()
+    img_binary = cv2.threshold(np.array(resized_img), 0, 255, cv2.THRESH_BINARY_INV)[1]
+    plt.imshow(img_binary, cmap='gray')
+    plt.show() """
 
 def img_to_Tensor(path):
-    image = Image.open(path)
+    #image = Image.open(path)
+    image = cv2.imread(path,cv2.IMREAD_GRAYSCALE)
     # transform Image into the numpy array
-    image_2_npArray = np.asarray(image)
-    print(np.shape(image_2_npArray))
-    print('the shape of loaded image transformed into numpy array: {}'.format(np.shape(image_2_npArray)))
-    print('transformed image: {}'.format(image_2_npArray))
+    image_2_npArray = np.array(image)
 
     # transform the numpy array into the tensor
-    image_2_npArray_2_tensor = torchvision.transforms.ToTensor()(image_2_npArray)
-    print('the shape of numpy array transformed into tensor: {}'.format(np.shape(image_2_npArray_2_tensor)))
-    print('transformed numpy array: {}'.format(image_2_npArray_2_tensor))
+    image_2_npArray_2_tensor = from_numpy(image_2_npArray)
+    return image_2_npArray_2_tensor
 
 
 ''' If ever you get this error : OSError: Unable to locate Ghostscript on paths
@@ -131,10 +145,10 @@ erase_all.place(relx=0.5,rely=0.55, anchor='center')
 # show result button
 result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=display_result)
 result_button.place(relx=0.5,rely=0.65, anchor='center')
-# display image button
-result_button=Button(rightCanvas,text="Display Image",padx=20,pady=5,command=display_image)
+""" # display image button
+result_button=Button(rightCanvas,text="Display Image",padx=20,pady=5,command=predict)
 result_button.place(relx=0.5,rely=0.85, anchor='center')
-
+ """
 #####################      Main      #####################
 myCanvas.bind('<Button-1>',penClick)
 myCanvas.bind('<B1-Motion>',move) 

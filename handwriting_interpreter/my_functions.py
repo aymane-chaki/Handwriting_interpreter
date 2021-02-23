@@ -6,6 +6,7 @@ import numpy as np
 gpu = device('cuda:0' if cuda.is_available() else 'cpu')
 
 def extract_features(image_tensor)  :
+    print(image_tensor.size())
     pixels = image_tensor.size()   
     cell_division = (4,4)       #la division des images par cellule
     image_tensor_float = image_tensor.float()
