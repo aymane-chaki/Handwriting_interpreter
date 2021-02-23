@@ -23,7 +23,7 @@ validation_dataset = load('datasets\\validation_7x7.pt')
 
 ################################################### creating our data loaders #####################################################
 
-batch_size = 16     #64 is most used value in MNIST training, but we can change it to our preference since it's a hyperparameter
+batch_size = 32     
 training_DL = DataLoader(training_dataset,batch_size=batch_size)
 test_DL = DataLoader(test_dataset,batch_size=batch_size)
 validation_DL = DataLoader(validation_dataset,batch_size=batch_size)
@@ -33,12 +33,12 @@ print(len(validation_DL))
 print(len(test_DL))
 
 ############################################### Instantiating our Nearal network ##################################################
-#model = MyNetwork(n_features = 48, hid1=64, hid2=42, out=10)   #n_features = 4*4*3, image is divided into 16 cells in the feature extraction process
-model = MyNetwork(n_features = 147, hid1=64, hid2=64, out=10)    #n_features = 7*7*3, image is divided into 49 cells in the feature extraction process
+#model = MyNetwork(n_features = 48, hid1=64, hid2=42, out=10)   #n_features = 4*4*3, image is divided into 16 cells in the feature extraction phase
+model = MyNetwork(n_features = 147, hid1=120, hid2=96, out=10)    #n_features = 7*7*3, image is divided into 49 cells in the feature extraction phase
 #loss function
 loss_function = nn.CrossEntropyLoss()
 #cost optimization function
-optimization_function = optim.Adam(model.parameters(), lr=0.00005)   #we tested at first with learning rate 0.001
+optimization_function = optim.Adam(model.parameters(), lr=0.00001)   #we tested at first with learning rate 0.001
 #number of epochs
 epochs = 40 #we tested at first with 10 epochs
 
@@ -107,6 +107,6 @@ print("Test loss : {} \nTest precision : {}%\n".format(test_loss, correct*100))
 
 ############################################################# saving model ########################################################
 #save(model,'models\\digit_model_4x4.pt')
-save(model,'models\\digit_model_7x7.pt')
-#save(model,'models\\digit_model_test.pt')
-print("Module successfully saved.")
+#save(model,'models\\digit_model_7x7.pt')
+save(model,'models\\digit_model_test.pt')
+print("Model successfully saved.")
