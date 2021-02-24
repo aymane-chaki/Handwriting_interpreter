@@ -82,9 +82,6 @@ def contouring_image(pil_image):
         cropped_contour= original_image[y-10:y+h+10, x-10:x+w+10]
         image_name= "processed_images\\croppedImage.png"
         cv2.imwrite(image_name, cropped_contour)
-        #readimage= cv2.imread(image_name)
-        #cv2.imshow('Image', readimage)
-        #cv2.waitKey(0)
         break   #on arrête après une itération pour prendre seulement l'image avec la plus grande surface, c'est l'image qu'on veut
         
 

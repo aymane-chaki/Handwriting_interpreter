@@ -1,0 +1,27 @@
+________Outline________
+
+I- Création des datasets MNIST personnalisés :
+	1. Introduction
+	2. Extraction des attributs
+	3. Paramètres et résultats de l'extraction
+	4. Création des datasets
+	5. Conclusion
+II- Implémentation du réseau de neuronnes:
+	1. Introduction
+	2. Paramètres du réseau de neuronnes
+	3. Entraînement, validation et vérification (+Précision du modèle)
+	4. Conclusion (sauvegarde du modèle)
+III- Interface graphique :
+	1. Introduction
+	2. Description de l'interface graphique (GUI)
+	3. Fonctionnement de l'application
+		a) Capturer le chiffre écrit
+		b) Recadrage de la capture (sur le contour du chiffre)
+		c) Pré-traitement de l'image
+		d) Extraction des attributs de l'image traitée
+		e) Prédiction du chiffre et affichage du résultat
+	4.  Essai de l'application
+	5. Conclusion
+IV- Quelques améliorations :
+	1. Modification des hyper-paramètres
+	2. Utilisation de la GPU

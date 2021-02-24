@@ -38,7 +38,7 @@ model = MyNetwork(n_features = 147, hid1=120, hid2=96, out=10)    #n_features = 
 #loss function
 loss_function = nn.CrossEntropyLoss()
 #cost optimization function
-optimization_function = optim.Adam(model.parameters(), lr=0.00001)   #we tested at first with learning rate 0.001
+optimization_function = optim.Adam(model.parameters(), lr=0.00001)   #we tested at first with learning rate 0.0001
 #number of epochs
 epochs = 40 #we tested at first with 10 epochs
 
@@ -107,6 +107,6 @@ print("Test loss : {} \nTest precision : {}%\n".format(test_loss, correct*100))
 
 ############################################################# saving model ########################################################
 #save(model,'models\\digit_model_4x4.pt')
-#save(model,'models\\digit_model_7x7.pt')
-save(model,'models\\digit_model_test.pt')
+save(model,'models\\digit_model_7x7.pt')
+#save(model,'models\\digit_model_test.pt')
 print("Model successfully saved.")
