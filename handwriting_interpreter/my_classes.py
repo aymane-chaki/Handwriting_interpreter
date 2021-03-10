@@ -24,6 +24,6 @@ class MyNetwork(nn.Module):
         self.output = nn.Linear(hid2, out)
 
     def forward(self, x):
-        x = F.relu(self.hidden1(x))
+        x = F.relu(self.hidden1(x)) #RELU (Rectified Linear Unit) as activation function
         x = F.relu(self.hidden2(x))
         return self.output(x)

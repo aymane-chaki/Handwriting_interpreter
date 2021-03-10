@@ -35,7 +35,7 @@ print(len(test_DL))
 ############################################### Instantiating our Nearal network ##################################################
 #model = MyNetwork(n_features = 48, hid1=64, hid2=42, out=10)   #n_features = 4*4*3, image is divided into 16 cells in the feature extraction phase
 model = MyNetwork(n_features = 147, hid1=120, hid2=96, out=10)    #n_features = 7*7*3, image is divided into 49 cells in the feature extraction phase
-#loss function
+#loss function, we use cross entropy loss for classification models
 loss_function = nn.CrossEntropyLoss()
 #cost optimization function
 optimization_function = optim.Adam(model.parameters(), lr=0.00001)   #we tested at first with learning rate 0.0001

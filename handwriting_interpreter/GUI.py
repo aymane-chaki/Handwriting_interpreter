@@ -41,7 +41,7 @@ def delete_all():
 # display_result is a function that takes an input and print it in a label widget
 def display_result():
     result_label = Label(rightCanvas,text="The written number is : \n "+ str(predict()))
-    result_label.config(font=("Calibri",10),bg="white")
+    result_label.config(font=("Calibri",11),bg="white")
     result_label.place(relx=0.5,rely=0.95, anchor='center')
     resized_img = cv2.imread('processed_images\\resized_image.png')
     img_binary = cv2.threshold(resized_img, 0, 255, cv2.THRESH_BINARY_INV)[1]
@@ -105,10 +105,13 @@ def img_to_Tensor(path):
 
 
 #####################      Prepare the environment      #####################
-root= Tk(className=' Handwritten Digits Interpreter GUI')
+root= Tk(className=' Handwritten Digits Interpreter')
 root.resizable(False,False)
 root.geometry("700x500") 
-
+root.iconbitmap('icons\\icon.ico')
+eraser_icon = PhotoImage(file='icons\\eraser1.png')
+pen_icon = PhotoImage(file='icons\\pen1.png')
+guess_icon = PhotoImage(file='icons\\guess.png')
 #####################      Make the Layout      #####################
 # myCanvas is the main canvas where the user can draw
 myCanvas=Canvas(root,width=540,height=500,background='white') 
@@ -127,18 +130,18 @@ myLabel.place(relx =0.95, rely=0.01, anchor='ne')
 
 #####################      Creating the buttons      #####################
 # pen button
-penButton = Button(rightCanvas,text="Pen",padx=21,pady=5) #state=DISABLED to disable the button
+penButton = Button(rightCanvas,image=pen_icon,padx=21,pady=5) #state=DISABLED to disable the button
 penButton.place(relx =0.25, rely=0.35, anchor='center')
 penButton.bind('<Button-1>',func=pen)
 # eraser button
-eraserButton = Button(rightCanvas,text="Eraser",padx=15,pady=5) #state=DISABLED to disable the button
+eraserButton = Button(rightCanvas,image=eraser_icon,padx=15,pady=5) #state=DISABLED to disable the button
 eraserButton.place(relx =0.75, rely=0.35, anchor='center')
 eraserButton.bind('<Button-1>',func=eraser)
 # erase all button
 erase_all=Button(rightCanvas,text="Erase all",padx=30,pady=5,command=delete_all)
 erase_all.place(relx=0.5,rely=0.55, anchor='center')
 # show result button
-result_button=Button(rightCanvas,text="Show result",padx=20,pady=5,command=display_result)
+result_button=Button(rightCanvas,image=guess_icon,command=display_result, borderwidth=0, background='white')
 result_button.place(relx=0.5,rely=0.65, anchor='center')
 #####################      Main      #####################
 myCanvas.bind('<Button-1>',penClick)
