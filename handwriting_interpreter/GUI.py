@@ -1,7 +1,7 @@
 from tkinter import *
 from PIL import Image
 import io
-from cv2 import cv2
+from cv2 import cv2 
 from torchvision.transforms import ToTensor
 import torchvision
 import numpy as np
