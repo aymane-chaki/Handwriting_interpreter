@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image
 import io
+import os
 from cv2 import cv2 
 from torchvision.transforms import ToTensor
 import torchvision
@@ -108,6 +109,11 @@ def img_to_Tensor(path):
 root= Tk(className=' Handwritten Digits Interpreter')
 root.resizable(False,False)
 root.geometry("700x500") 
+# change the working directory to the directory where this script is located
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+
 root.iconbitmap('icons\\icon.ico')
 eraser_icon = PhotoImage(file='icons\\eraser1.png')
 pen_icon = PhotoImage(file='icons\\pen1.png')
