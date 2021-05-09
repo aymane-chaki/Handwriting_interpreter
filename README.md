@@ -1,2 +1,4 @@
 # Handwriting_interpreter
-Handwritten numbers recognition with Python
+Handwritten numbers recognitio
+
+![image info](GUI_capture.PNG)
