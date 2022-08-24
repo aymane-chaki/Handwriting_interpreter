@@ -2,7 +2,7 @@
 
 Handwritten numbers recognition system using a backpropagation neural network trained using the MNIST dataset.
 
-The steps followed in implemeting the system are :
+The steps followed in implementing the system are :
 
 - Pre-processing the dataset
 - Feature extraction using a method called LLF (Local Line Fitting) which is based on geometric ans statistic properties of the handwritten numbers
